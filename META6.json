@@ -1,0 +1,20 @@
+{
+  "name": "Intl::LanguageTaggish",
+  "description": "A role modeling behaviors of a Language Tag!",
+  "version": "0.1",
+  "perl": "6.*",
+  "raku": "6.*",
+  "authors": [
+    "Matthew Stephen Stuckwisch"
+  ],
+  "auth": "git:alabamenhu",
+  "depends": [],
+  "build-depends": [],
+  "test-depends": ["Test"],
+  "provides": {
+    "Intl::LanguageTaggish": "lib/Intl/LanguageTaggish.rakumod"
+  },
+  "resources": [],
+  "license": "Artist-2.0",
+  "source-url": "git://github.com/alabamenhu/IntlLanguageTaggish.git"
+}

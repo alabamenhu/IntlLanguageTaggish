@@ -1,0 +1,4 @@
+use LanguageTaggish;
+use Test;
+
+done-testing;
