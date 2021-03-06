@@ -34,8 +34,10 @@ In priority order, classes judge whether they can handle the tag, and if so, wil
 This IETF BCP-47 representation (uses hyphens and subtags are limited to 8 characters).
   * `Intl::LanguageTag::Unicode` (**:75priority**)  
 The Unicode language tag standard (uses underscores generally, subtags may have any number of characters)
-  * `Intl::LanguageTag::POSIX` (**:25priority**)  
+  * `Intl::LanguageTag::POSIX` (**:50priority**)  
 The standard langauge tag as used in POSIX (underscores, at symbols, and dots may delineate subtags)
+  * `Intl::LanguageTag::UnicodeLegacy` (**:25priority**)  
+The legacy style Unicode langauge tag (underscores and at symbols delineate subtags, special characters like slash are valid as variant values)
   * `Intl::LanguageTaggish::Fallback` (**:0priority**)  
 A fallback that detects the first (and possible second) sequence of alpha characters as the language (and possible region).
 
