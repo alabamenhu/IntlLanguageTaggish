@@ -1,4 +1,4 @@
-use LanguageTaggish;
+use Intl::LanguageTaggish;
 use Test;
 
 done-testing;
