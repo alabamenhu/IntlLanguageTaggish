@@ -121,6 +121,6 @@ my class Fallback does LanguageTaggish {
 
 sub EXPORT {
     Map.new:
-        LanguageTaggish => LanguageTaggish,
-        Fallback        => Fallback
+        'LanguageTaggish', LanguageTaggish,
+        'Fallback',        Fallback
 }

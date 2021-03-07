@@ -29,6 +29,7 @@ The role handles this by default via its `FALLBACK` method.
 Classes implementing `LanguageTaggish` register themselves on the first `use` statement to be available for coercion.
 Optimally, programmers in international environments will know what tag is needed, however, when it's not possible, the `COERCE` method aims to do its best.
 In priority order, classes judge whether they can handle the tag, and if so, will do the coercion. 
+**This approach is not (as of v0.1) finalized and may be adjusted.**
 
   * `Intl::LanguageTag::BCP-47` (**:100priority**)  
 This IETF BCP-47 representation (uses hyphens and subtags are limited to 8 characters).
