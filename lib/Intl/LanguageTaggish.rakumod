@@ -23,7 +23,7 @@ new language tag classes are strongly urged to adopt standard accessor names in 
 extant classes.
 =end pod
 
-my role LanguageTaggish {
+role LanguageTaggish {
     #= A role describing generic features of a language tag.
     #= Unknown attributes should be return the empty string
 
@@ -40,31 +40,5 @@ my role LanguageTaggish {
     method FALLBACK (--> Str) { '' }
 
     #| Coerces into a LanguageTaggish subclass
-    multi method COERCE (LanguageTaggish --> ::?CLASS ) { ... }
-}
-
-#| A very simple class representing a generic language tag
-my class Simple does LanguageTaggish is export(:simple) {
-    has $.language;
-    has $.region;
-
-    method bcp47 { ($!language.lc ~ '-' ~ $!region.uc) but False }
-    method Str   {  $!language.lc ~ '-' ~ $!region.uc            }
-    multi method COERCE (Str $s) {
-        $s ~~ /(<alpha>+) [<!alpha>+ (<alpha>+)]?/;
-        self.bless:
-            language => ~ $0,
-            region   => ~($1//''),
-    }
-    multi method COERCE (LanguageTaggish $tag --> Simple) {
-        self.bless:
-            language => ~$tag.language,
-            region   => ~$tag.region,
-    }
-}
-
-sub EXPORT {
-    Map.new:
-        'LanguageTaggish', LanguageTaggish,
-        'Simple',          Simple
+    multi method COERCE (LanguageTaggish:D --> ::?CLASS ) { ... }
 }
