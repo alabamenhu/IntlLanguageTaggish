@@ -24,6 +24,7 @@ and attributes.  In keeping with tradition established by other language tag fra
 (in particular ICU), requested values not present should return the empty string.  
 The role handles this by default via its `FALLBACK` method.
 
+In addition, each `LanguageTaggish` implementor is expected to also provide a method `
 ## Coercions into `LanguageTaggish`
 
 Classes implementing `LanguageTaggish` register themselves on the first `use` statement to be available for coercion.

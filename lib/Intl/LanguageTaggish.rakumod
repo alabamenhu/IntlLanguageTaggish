@@ -19,7 +19,8 @@ It is expected that class implementing LanguageTaggish will add additional metho
 and attributes.  In keeping with tradition established by other language tag frameworks
 (in particular ICU), requested values not present should return the empty string.
 The role handles this by default via its C<FALLBACK> method.  For this reason,
-new language tag classes are strongly urged to adopt standard accessor names
+new language tag classes are strongly urged to adopt standard accessor names in line with
+extant classes.
 =end pod
 
 my role LanguageTaggish {
@@ -38,89 +39,32 @@ my role LanguageTaggish {
     #| Any undefined method returns the empty string
     method FALLBACK (--> Str) { '' }
 
-    =begin pod
-    =head2 Coercions
-
-    Developers wishing to use employ language tags can use `LanguageTaggish()` in type signatures.
-    Classes implementing `LanguageTaggish` are able to register themselves for coercion.  At
-    present, the following classes are known to exist (in order of coercion attempts)
-
-        =item C<Intl::LanguageTag::BCP-47> (B<:100priority>)
-        =item C<Intl::LanguageTag::Unicode> (B<:75priority>)
-        =item C<Intl::LanguageTag::POSIX> (B<:50priority>)
-        =item C<Intl::LanguageTag::UnicodeLegacy> (B<:25priority>)
-        =item C<Intl::LanguageTaggish::Fallback> (B<:0priority>)
-
-    You will need to `use Intl::LanguageTag::*` in order to enable one or more of these classes for coercion.
-    Because a C<bcp47> method is required, to easily accept any style language tag, but ensure it's ultimately
-    coerced into a particular type that you want to you use, you can take advantage of nested coercions in
-    signatures:
-
-        =begin code
-        sub something-localized(
-            LanguageTag(          LanguageTaggish() )   $bcp47-tag,  #= A tag in the BCP-47 format (most common)
-            LanguageTag::Unicode( LanguageTaggish() ) $unicode-tag,  #= A tag in the Unicode format
-            LanguageTag::POSIX(   LanguageTaggish() )   $posix-tag,  #= A tag in the POSIX format
-        ) { ... }
-        =end code
-    =end pod
-
-    my class Coercion {
-        has Int:D      $.priority  is required;
-        has            &.condition is required;
-        has Mu:U       $.class     is required;
-    }
-    my Coercion @coercions;
-
-    #| Attempt to create a LanguageTaggish object
-    multi method COERCE(Str() $s) {
-        return .class.COERCE($s)
-        if $s ~~ .condition
-        for @coercions
-    }
-
-    method REGISTER(Mu:U $class, Int:D $priority, &condition) {
-        my $new = Coercion.new(:&condition, :$class, :$priority);
-
-        for @coercions.kv -> $pos, $coercion {
-            @coercions.splice: $pos, 0, $new
-                and last
-            if $coercion.priority < $priority
-        }
-        @coercions.push: $new;
-    }
+    #| Coerces into a LanguageTaggish subclass
+    multi method COERCE (LanguageTaggish --> ::?CLASS ) { ... }
 }
 
 #| A very simple class representing a generic language tag
-my class Fallback does LanguageTaggish {
+my class Simple does LanguageTaggish is export(:simple) {
     has $.language;
     has $.region;
-    has $!orig is built;
 
-    method bcp47 { $!orig but False }
-    method Str   { $!orig           }
+    method bcp47 { ($!language.lc ~ '-' ~ $!region.uc) but False }
+    method Str   {  $!language.lc ~ '-' ~ $!region.uc            }
     multi method COERCE (Str $s) {
-        $s ~~ /(<alpha>+) <!alpha>* (<alpha>+)/;
+        $s ~~ /(<alpha>+) [<!alpha>+ (<alpha>+)]?/;
         self.bless:
             language => ~ $0,
             region   => ~($1//''),
-            orig     => ~ $s
     }
-    multi method COERCE (LanguageTaggish $tag) {
+    multi method COERCE (LanguageTaggish $tag --> Simple) {
         self.bless:
             language => ~$tag.language,
             region   => ~$tag.region,
-            orig     => ~$tag
     }
-    once Fallback.REGISTER:
-        Fallback,
-        0,
-        /<alpha>+ <!alpha>* <alpha>+/
 }
-
 
 sub EXPORT {
     Map.new:
         'LanguageTaggish', LanguageTaggish,
-        'Fallback',        Fallback
+        'Simple',          Simple
 }
