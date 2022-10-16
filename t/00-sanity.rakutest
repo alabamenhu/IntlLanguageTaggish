@@ -1,4 +1,6 @@
 use Intl::LanguageTaggish;
 use Test;
 
+ok True;
+
 done-testing;
