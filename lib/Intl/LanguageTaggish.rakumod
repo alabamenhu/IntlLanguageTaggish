@@ -15,7 +15,7 @@ So a theoretical C<AppleLProj> class that does C<LanguageTaggish> would output B
 for C<.language>, but for C<bcp47>, would output B<en>.  If a conversion is not possible,
 a falsey value should be returned (for example, `self.Str but False`).
 
-It is expected that class implementing LanguageTaggish will add additional methods
+It is expected that classes implementing LanguageTaggish will add additional methods
 and attributes.  In keeping with tradition established by other language tag frameworks
 (in particular ICU), requested values not present should return the empty string.
 The role handles this by default via its C<FALLBACK> method.  For this reason,
