@@ -15,6 +15,6 @@
     "Intl::LanguageTaggish": "lib/Intl/LanguageTaggish.rakumod"
   },
   "resources": [],
-  "license": "Artist-2.0",
+  "license": "Artistic-2.0",
   "source-url": "git://github.com/alabamenhu/IntlLanguageTaggish.git"
 }
